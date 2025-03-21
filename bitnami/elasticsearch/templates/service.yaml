@@ -51,7 +51,7 @@ spec:
       port: {{ .Values.service.ports.transport }}
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.transport)) }}
       nodePort: {{ .Values.service.nodePorts.transport }}
-      {{- else if eq .Values.service.type "ClusterIP" }}
+      {{- else if eq .Values.service.type "NodePort" }}
       nodePort: null
       {{- end }}
     {{- if .Values.service.extraPorts }}
