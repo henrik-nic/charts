@@ -134,20 +134,13 @@ extraEnvVarsCM: ""
 ## ref: https://www.elastic.co/guide/en/logstash/current/input-plugins.html
 ##
 input: |
-   input {
-     beats {
-      port => 5044
-   }
- }
-
- filter {
- }
- output {
-  elasticsearch {
-    hosts => ["http://elasticsearch:9200"]  # Replace with your Elasticsearch host
-    index => "logstash-%{+YYYY.MM.dd}"     # Index pattern for daily indices
+  # logstash-input.conf
+  
+  input {
+    beats {
+      port => 5044  # Change this port if necessary
+    }
   }
- }
 ## @param extraInput [string] Extra Input Plugins configuration
 ## ref: https://www.elastic.co/guide/en/logstash/current/input-plugins.html
 ##
@@ -167,14 +160,16 @@ filter: ""
 ## @param output [string] Output Plugins configuration
 ## ref: https://www.elastic.co/guide/en/logstash/current/output-plugins.html
 ##
-output: |-
-   #elasticsearch {
-   #  hosts => ["${"http://elasticsearch:9200"}:${9200}"]
-  #   manage_template => false
- #    index => "logstash-%{+YYYY.MM.dd}"     # Index pattern for daily indices
-#  stdout {}
-## @param existingConfiguration Name of existing ConfigMap object with the Logstash configuration (`input`, `filter`, and `output` will be ignored).
-##
+output: |
+  # logstash-output.conf
+
+  output {
+    elasticsearch {
+      hosts => ["http://elasticsearch:9200"]  # Replace with your Elasticsearch host
+      index => "logstash-%{+YYYY.MM.dd}"     # Index pattern for daily indices
+    }
+  }
+
 existingConfiguration: ""
 ## @param extraConfigurationFiles Extra configuration files to be added to the configuration ConfigMap and mounted at /bitnami/logstash/config. Rendered as a template.
 ## NOTE: Mounting logstash.yml may cause other settings to be ignored
