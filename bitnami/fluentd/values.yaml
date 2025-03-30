@@ -190,7 +190,7 @@ forwarder:
 
 
        <source>
-         @type tail
+         @type FLUENT_LOGS
          path /var/log/*.log
          pos_file /var/log/fluentd.pos
          tag your-tag
@@ -828,7 +828,7 @@ aggregator:
       # Send the logs to the standard output
       <match **>
         @type elasticsearch
-        host 10.1.78.90
+        host elasticsearch.local
         port 9200
         logstash_format true
         logstash_prefix fluentd
