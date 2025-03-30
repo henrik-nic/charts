@@ -165,11 +165,6 @@ output: |-
      hosts => ["${"http://elasticsearch:9200"}:${9200}"]
      manage_template => false
      index => "logstash-%{+YYYY.MM.dd}"     # Index pattern for daily indices
-  # }
-  # gelf {
-  #   host => "${GRAYLOG_HOST}"
-  #   port => ${GRAYLOG_PORT}
-  # }
   stdout {}
 ## @param existingConfiguration Name of existing ConfigMap object with the Logstash configuration (`input`, `filter`, and `output` will be ignored).
 ##
