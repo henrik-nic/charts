@@ -134,15 +134,16 @@ extraEnvVarsCM: ""
 ## ref: https://www.elastic.co/guide/en/logstash/current/input-plugins.html
 ##
 input: |-
-  # udp {
-  #   port => 1514
-  #   type => syslog
-  # }
-  # tcp {
-  #   port => 1514
-  #   type => syslog
-  # }
-  http { port => 8080 }
+   input {
+  beats {
+    port => 5044
+  }
+}
+
+filter {
+  # You can add filters here to modify or process logs, such as grok patterns, date parsing, etc.
+}
+
 ## @param extraInput [string] Extra Input Plugins configuration
 ## ref: https://www.elastic.co/guide/en/logstash/current/input-plugins.html
 ##
@@ -163,10 +164,10 @@ filter: ""
 ## ref: https://www.elastic.co/guide/en/logstash/current/output-plugins.html
 ##
 output: |-
-  # elasticsearch {
-  #   hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
-  #   manage_template => false
-  #   index => "%{[@metadata][beat]}-%{+YYYY.MM.dd}"
+   elasticsearch {
+     hosts => ["${"http://elasticsearch:9200"}:${9200}"]
+     manage_template => false
+     index => "logstash-%{+YYYY.MM.dd}"     # Index pattern for daily indices
   # }
   # gelf {
   #   host => "${GRAYLOG_HOST}"
