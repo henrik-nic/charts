@@ -183,8 +183,8 @@ forwarder:
   configMapFiles:
     fluentd.conf: |
       # Ignore fluentd own events
-      <match @FLUENT_LOG>  #ORG-#fluent.**
-        @type tail
+      <match fluent.**>
+        @FLUENT_LOG
       </match>
 
       @include fluentd-inputs.conf
