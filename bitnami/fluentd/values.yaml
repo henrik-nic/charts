@@ -184,21 +184,8 @@ forwarder:
     fluentd.conf: |
       # Ignore fluentd own events
       <match fluent.**>
-        @type elasticsearch
-        host elasticsearch.local
-        port 9200
-        logstash_format true
-        logstash_prefix fluentd
-        flush_interval 5s
+        @type stdout
       </match>
-
-      <source>
-        @type tail
-        path /var/log/*.log
-        pos_file /var/log/fluentd.pos
-        tag your-tag
-        format none
-      </source>
 
       @include fluentd-inputs.conf
       @include fluentd-output.conf
