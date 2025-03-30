@@ -803,7 +803,7 @@ aggregator:
   configMapFiles:
     fluentd.conf: |
       # Ignore fluentd own events
-      <match @FLUENT_LOGS>    #fluent.**
+      <match @FLUENT_LOG>    #fluent.**
          @type null
       </match>
 
@@ -844,7 +844,12 @@ aggregator:
 
       # Send the logs to the standard output
       <match **>
-        @type stdout
+        @type elasticsearch
+        host 10.1.78.90
+        port 9200
+        logstash_format true
+        logstash_prefix fluentd
+        flush_interval 3s        
       </match>
     metrics.conf: |
       # Prometheus Exporter Plugin
