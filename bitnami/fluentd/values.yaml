@@ -840,8 +840,8 @@ aggregator:
       
       # Send logs from "fluentd.healthcheck" to Elasticsearch
       <match fluentd.healthcheck>
-        @type elasticsearch
-        host elasticsearch-master.logging.svc.cluster.local
+        @type elasticsearch  
+        hoste lasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
         port 9200
         logstash_format true
         logstash_prefix fluentd-healthcheck
@@ -851,7 +851,7 @@ aggregator:
       # Send all other logs to Elasticsearch
       <match **>
         @type elasticsearch
-        host elasticsearch-master.logging.svc.cluster.local
+        host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
         port 9200
         logstash_format true
         flush_interval 5s
