@@ -227,8 +227,7 @@ forwarder:
         port 9200
         index_name fluentd-logs
         type_name _doc
-        logstah_forman true
-        logstash_prefix fluentd-healthcheck
+
       </match>
       {{- if .Values.aggregator.enabled }}
       # Forward all logs to the aggregators
@@ -269,39 +268,12 @@ forwarder:
         port 9200
         index_name fluentd-logs
         type_name _doc
-        logstah_forman true
-        logstash_prefix fluentd-healthcheck
+
         
       </match>
       {{- end }}
-    metrics.conf: |
-      # Prometheus Exporter Plugin
-      # input plugin that exports metrics
-      <source>
-        @type prometheus
-        port {{ .Values.metrics.service.port }}
-      </source>
-      # input plugin that collects metrics from MonitorAgent
-      <source>
-        @type prometheus_monitor
-        <labels>
-          host ${hostname}
-        </labels>
-      </source>
-      # input plugin that collects metrics for output plugin
-      <source>
-        @type prometheus_output_monitor
-        <labels>
-          host ${hostname}
-        </labels>
-      </source>
-      # input plugin that collects metrics for in_tail plugin
-      <source>
-        @type prometheus_tail_monitor
-        <labels>
-          host ${hostname}
-        </labels>
-      </source>
+    metrics.conf: |-
+    
   ## @param forwarder.extraArgs Extra arguments for the Fluentd command line
   ## ref: https://docs.fluentd.org/deployment/command-line-option
   ##
@@ -856,8 +828,6 @@ aggregator:
         @type elasticsearch  
         host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
         port 9200
-        logstash_format true
-        logstash_prefix fluentd-healthcheck
       </match>
       
       # Send all other logs to Elasticsearch
@@ -866,7 +836,6 @@ aggregator:
         host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
         port 9200
         index_name fleuntd-logs
-        logstash_format true
       </match>      
       
   ## @param aggregator.port Port the Aggregator container will listen for logs. Leave it blank to ignore.
