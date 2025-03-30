@@ -803,8 +803,8 @@ aggregator:
   configMapFiles:
     fluentd.conf: |
       # Ignore fluentd own events
-      <match fluent.**>
-        @type null
+      <match @FLUENT_LOGS>    #fluent.**
+         @type null
       </match>
 
       @include fluentd-inputs.conf
