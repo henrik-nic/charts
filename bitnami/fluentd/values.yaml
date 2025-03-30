@@ -184,7 +184,7 @@ forwarder:
     fluentd.conf: |
       # Ignore fluentd own events
       <match fluent.**>
-        @type stdout
+        @type null
       </match>
 
       @include fluentd-inputs.conf
@@ -261,7 +261,34 @@ forwarder:
         @type stdout
       </match>
       {{- end }}
-   
+    metrics.conf: |
+      # Prometheus Exporter Plugin
+      # input plugin that exports metrics
+      <source>
+        @type prometheus
+        port {{ .Values.metrics.service.port }}
+      </source>
+      # input plugin that collects metrics from MonitorAgent
+      <source>
+        @type prometheus_monitor
+        <labels>
+          host ${hostname}
+        </labels>
+      </source>
+      # input plugin that collects metrics for output plugin
+      <source>
+        @type prometheus_output_monitor
+        <labels>
+          host ${hostname}
+        </labels>
+      </source>
+      # input plugin that collects metrics for in_tail plugin
+      <source>
+        @type prometheus_tail_monitor
+        <labels>
+          host ${hostname}
+        </labels>
+      </source>
   ## @param forwarder.extraArgs Extra arguments for the Fluentd command line
   ## ref: https://docs.fluentd.org/deployment/command-line-option
   ##
@@ -776,8 +803,8 @@ aggregator:
   configMapFiles:
     fluentd.conf: |
       # Ignore fluentd own events
-      <match @FLUENT_LOG>    #fluent.**
-         @type null
+      <match fluent.**>
+        @type null
       </match>
 
       @include fluentd-inputs.conf
@@ -817,12 +844,7 @@ aggregator:
 
       # Send the logs to the standard output
       <match **>
-        @type elasticsearch
-        host elasticsearch.local
-        port 9200
-        logstash_format true
-        logstash_prefix fluentd
-        flush_interval 3s        
+        @type stdout
       </match>
     metrics.conf: |
       # Prometheus Exporter Plugin
