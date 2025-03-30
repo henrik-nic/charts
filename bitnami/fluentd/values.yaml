@@ -190,7 +190,7 @@ forwarder:
 
 
        <source>
-         @type FLUENT_LOGS
+         @type elasticsearch
          path /var/log/*.log
          pos_file /var/log/fluentd.pos
          tag your-tag
