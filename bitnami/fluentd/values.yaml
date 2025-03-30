@@ -225,9 +225,8 @@ forwarder:
         @type elasticsearch
         host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
         port 9200
-        logstash_format true
+        logstah_forman true
         logstash_prefix fluentd-healthcheck
-        flush_interval 5s
       </match>
       {{- if .Values.aggregator.enabled }}
       # Forward all logs to the aggregators
