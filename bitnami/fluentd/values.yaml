@@ -225,6 +225,8 @@ forwarder:
         @type elasticsearch
         host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
         port 9200
+        index_name fluentd-logs
+        type_name _doc
         logstah_forman true
         logstash_prefix fluentd-healthcheck
       </match>
@@ -265,9 +267,10 @@ forwarder:
         @type elasticsearch
         host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
         port 9200
-        logstash_format true
-        logstash_prefix fluentd-logs
-        flush_interval 5s
+        index_name fluentd-logs
+        type_name _doc
+        logstah_forman true
+        logstash_prefix fluentd-healthcheck
         
       </match>
       {{- end }}
@@ -855,7 +858,6 @@ aggregator:
         port 9200
         logstash_format true
         logstash_prefix fluentd-healthcheck
-        flush_interval 5s
       </match>
       
       # Send all other logs to Elasticsearch
@@ -863,34 +865,10 @@ aggregator:
         @type elasticsearch
         host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
         port 9200
+        index_name fleuntd-logs
         logstash_format true
-        flush_interval 5s
       </match>      
       
- 
-    metrics.conf: |
-      # Prometheus Exporter Plugin
-      # input plugin that exports metrics
-      <source>
-        @type prometheus
-        port {{ .Values.metrics.service.port }}
-      </source>
-
-      # input plugin that collects metrics from MonitorAgent
-      <source>
-        @type prometheus_monitor
-        <labels>
-          host ${hostname}
-        </labels>
-      </source>
-
-      # input plugin that collects metrics for output plugin
-      <source>
-        @type prometheus_output_monitor
-        <labels>
-          host ${hostname}
-        </labels>
-      </source>
   ## @param aggregator.port Port the Aggregator container will listen for logs. Leave it blank to ignore.
   ## You can specify other ports in the aggregator.containerPorts parameter
   ##
