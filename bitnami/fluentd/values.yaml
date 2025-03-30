@@ -837,15 +837,27 @@ aggregator:
         port 9880
       </source>
     fluentd-output.conf: |
-      # Throw the healthcheck to the standard output
+      
+      # Send logs from "fluentd.healthcheck" to Elasticsearch
       <match fluentd.healthcheck>
-        @type stdout
+        @type elasticsearch
+        host localhost
+        port 9200
+        logstash_format true
+        logstash_prefix fluentd-healthcheck
+        flush_interval 5s
       </match>
-
-      # Send the logs to the standard output
+      
+      # Send all other logs to Elasticsearch
       <match **>
-        @type stdout
-      </match>
+        @type elasticsearch
+        host localhost
+        port 9200
+        logstash_format true
+        flush_interval 5s
+      </match>      
+      
+ 
     metrics.conf: |
       # Prometheus Exporter Plugin
       # input plugin that exports metrics
