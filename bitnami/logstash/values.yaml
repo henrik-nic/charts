@@ -135,14 +135,11 @@ extraEnvVarsCM: ""
 ##
 input: |-
    input {
-  beats {
-    port => 5044
-  }
+     beats {
+      port => 5044
+    }
 }
 
-filter {
-  # You can add filters here to modify or process logs, such as grok patterns, date parsing, etc.
-}
 
 ## @param extraInput [string] Extra Input Plugins configuration
 ## ref: https://www.elastic.co/guide/en/logstash/current/input-plugins.html
