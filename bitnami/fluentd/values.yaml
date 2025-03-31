@@ -789,7 +789,7 @@ aggregator:
     fluentd.conf: |
       # Ignore fluentd own events
       <match fluent.**>
-        @type timestamp
+        @type forward
         format json
       </match>
 
