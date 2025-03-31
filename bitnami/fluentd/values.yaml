@@ -286,10 +286,15 @@ forwarder:
         host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
         port 9200
         index_name fluentd-logs
-        type_name _doc
-
-        
+        type_name _doc        
       </match>
+
+      <match>
+        <match fluent.**>
+        @type stdout
+        format json
+     </match>
+     
       {{- end }}
     metrics.conf: |-
     
