@@ -220,9 +220,7 @@ forwarder:
     fluentd-output.conf: |
       # Throw the healthcheck to the standard output instead of forwarding it
       <match fluentd.healthcheck>
-        @type forward
-          host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
-          port 9200
+        @type null
       </match>
       
       {{- if .Values.aggregator.enabled }}
@@ -257,13 +255,12 @@ forwarder:
         </buffer>
       </match>
       {{- else }}
+      
       # Send the logs to the standard output
       <match **>
-        @type forward
-        host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
-        port 9200        
+        @type sdtout
       </match>
-     
+      
       {{- end }}
     metrics.conf: |-
     
