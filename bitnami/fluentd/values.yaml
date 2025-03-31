@@ -185,7 +185,6 @@ forwarder:
       # Ignore fluentd own events
       <match fluent.**>
         @type null
-        format json
       </match>
 
       @include fluentd-inputs.conf
@@ -214,9 +213,7 @@ forwarder:
           time_format %Y-%m-%dT%H:%M:%S.%NZ
         </parse>
       </source>
-      # enrich with kubernetes metadata
-      {{- if or .Values.forwarder.serviceAccount.create .Values.forwarder.serviceAccount.name }}
-     
+      {{- if or .Values.forwarder.serviceAccount.create .Values.forwarder.serviceAccount.name }}     
       {{- end }}
 
       
@@ -226,8 +223,6 @@ forwarder:
         @type elasticsearch
         host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
         port 9200
-        index_name fluentd-logs
-        type_name _doc
       </match>
       
       {{- if .Values.aggregator.enabled }}
@@ -266,9 +261,7 @@ forwarder:
       <match **>
         @type elasticsearch
         host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
-        port 9200
-        index_name fluentd-logs
-        type_name _doc        
+        port 9200        
       </match>
      
       {{- end }}
@@ -791,7 +784,7 @@ aggregator:
       <match fluent.**>
         @type forward
         <server>
-          host "fluentd-0.fluentd-headless.efk.svc.cluster.local:24224"
+          host "https://kubernetes.default.svc"
           port 24224
         </server>
       </match>
@@ -839,7 +832,6 @@ aggregator:
         @type elasticsearch
         host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
         port 9200
-        index_name fleuntd-logs
       </match>
 
       <match>
