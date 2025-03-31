@@ -780,10 +780,8 @@ aggregator:
       # Ignore fluentd own events
       <match fluent.**>
         @type forward
-        <server>
           host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
           port 9200
-        </server>
       </match>
 
       @include fluentd-inputs.conf
