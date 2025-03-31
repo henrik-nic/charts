@@ -808,7 +808,7 @@ aggregator:
     fluentd.conf: |
       # Ignore fluentd own events
       <match fluent.**>
-        @type FLUENT_LOG
+        @type null
       </match>
 
       @include fluentd-inputs.conf
@@ -850,7 +850,7 @@ aggregator:
       </match>
       
       # Send all other logs to Elasticsearch
-      <match fluent**>
+      <match fluent.**>
         @type elasticsearch
         host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
         port 9200
