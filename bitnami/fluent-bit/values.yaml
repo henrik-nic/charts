@@ -517,16 +517,16 @@ config:
   ## @param config.service [string] Defines the global behaviour of the Fluent Bit engine.
   ##
   service: |
-  ##  [SERVICE]
-  ##      Flush        {{ .Values.config.flush }}
-  ##      Daemon       On
-  ##      Log_Level    {{ .Values.config.logLevel }}
-  ##      Config_Watch On
-  ##      HTTP_Server  On
-  ##      HTTP_Listen  0.0.0.0
-  ##      HTTP_Port    {{ .Values.containerPorts.http }}
-  ##      Parsers_File /opt/bitnami/fluent-bit/conf/parsers.conf
-  ##      Parsers_File /opt/bitnami/fluent-bit/conf/custom_parsers.conf
+    [SERVICE]
+        Flush        {{ .Values.config.flush }}
+        Daemon       Off
+        Log_Level    {{ .Values.config.logLevel }}
+        Config_Watch On
+        HTTP_Server  On
+        HTTP_Listen  0.0.0.0
+        HTTP_Port    {{ .Values.containerPorts.http }}
+        Parsers_File /opt/bitnami/fluent-bit/conf/parsers.conf
+        Parsers_File /opt/bitnami/fluent-bit/conf/custom_parsers.conf
   ## @param config.inputs [string] Defines the source from where Fluent Bit can collect data
   ## https://docs.fluentbit.io/manual/pipeline/inputs
   ##
@@ -535,15 +535,15 @@ config:
         Name cpu
   ## @param config.filters [string] Set of plugins that can be used to filter, modify, or enrich log data that is processed by Fluent Bit.
   ## https://docs.fluentbit.io/manual/pipeline/filters
-   Example:
-   filters: |
-     [FILTER]
-         Name kubernetes
-         Match kube.*
-         Merge_Log On
-         Keep_Log Off
-         K8S-Logging.Parser On
-         K8S-Logging.Exclude On
+  ## Example:
+  ## filters: |
+  ##   [FILTER]
+  ##       Name kubernetes
+  ##       Match kube.*
+  ##       Merge_Log On
+  ##       Keep_Log Off
+  ##       K8S-Logging.Parser On
+  ##       K8S-Logging.Exclude On
   ##
   filters: ""
   ## @param config.outputs [string] Outputs to send the collected data to different destinations
@@ -553,7 +553,6 @@ config:
     [OUTPUT]
         Name  stdout
         Match *
-        format json
   ## @param config.upstream This configuration is deprecated, please use `extraFiles` instead.
   ## https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/classic-mode/upstream-servers
   ##
