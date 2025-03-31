@@ -220,7 +220,8 @@ forwarder:
       <filter kubernetes.**>
         @type grep
         <regexp>
-          message ^(ERROR|WARN)
+          key message
+          pattern ^(ERROR|WARN)
         </regexp>
       </filter>
 
