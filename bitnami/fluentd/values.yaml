@@ -860,7 +860,12 @@ aggregator:
         host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
         port 9200
         index_name fleuntd-logs
-      </match>      
+      </match>
+
+      <match>
+        @type stdout
+        format json
+      </match>
       
   ## @param aggregator.port Port the Aggregator container will listen for logs. Leave it blank to ignore.
   ## You can specify other ports in the aggregator.containerPorts parameter
