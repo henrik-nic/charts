@@ -816,13 +816,7 @@ aggregator:
         port 9880
       </source>
     fluentd-output.conf: |
-      
-      # Send logs from "fluentd.healthcheck" to Elasticsearch
-      <match fluentd.healthcheck>
-        @type elasticsearch  
-        host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
-      </match>
-      
+
       # Send all other logs to Elasticsearch
       <match fluent.**>
         @type forward
