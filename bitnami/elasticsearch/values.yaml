@@ -27,13 +27,13 @@ global:
   ##
   security:
     ## @param global.security.allowInsecureImages Allows skipping image verification
-    allowInsecureImages: false
+    allowInsecureImages: true
   elasticsearch:
     service:
       name: elasticsearch
       ports:
         restAPI: 9200
-  kibanaEnabled: false
+  kibanaEnabled: true
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
