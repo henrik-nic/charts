@@ -850,7 +850,7 @@ aggregator:
       </match>
       
       # Send all other logs to Elasticsearch
-      <match FLUENT_LOG>
+      <match fluent**>
         @type elasticsearch
         host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
         port 9200
