@@ -215,24 +215,7 @@ forwarder:
       </source>
       # enrich with kubernetes metadata
       {{- if or .Values.forwarder.serviceAccount.create .Values.forwarder.serviceAccount.name }}
-      
-      
-      <filter kubernetes.**>
-        @type grep
-        <regexp>
-          key message
-          pattern ^(ERROR|WARN)
-        </regexp>
-      </filter>
-
-      <filter kubernetes.**>
-        @type parser
-        key_name message
-        format json
-      </filter>
-
-
-      
+     
       {{- end }}
 
       
@@ -245,8 +228,6 @@ forwarder:
         index_name fluentd-logs
         type_name _doc
       </match>
-
-
       
       {{- if .Values.aggregator.enabled }}
       # Forward all logs to the aggregators
@@ -288,12 +269,6 @@ forwarder:
         index_name fluentd-logs
         type_name _doc        
       </match>
-
-      <match>
-        <match fluent.**>
-        @type stdout
-        format json
-     </match>
      
       {{- end }}
     metrics.conf: |-
