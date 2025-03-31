@@ -220,7 +220,7 @@ forwarder:
     fluentd-output.conf: |
       # Throw the healthcheck to the standard output instead of forwarding it
       <match fluentd.healthcheck>
-        @type elasticsearch
+        @type forward
         host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
         port 9200
       </match>
@@ -259,7 +259,7 @@ forwarder:
       {{- else }}
       # Send the logs to the standard output
       <match **>
-        @type elasticsearch
+        @type forward
         host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
         port 9200        
       </match>
@@ -784,8 +784,8 @@ aggregator:
       <match fluent.**>
         @type forward
         <server>
-          host "https://kubernetes.default.svc"
-          port 24224
+          host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
+          port 9200
         </server>
       </match>
 
@@ -829,7 +829,7 @@ aggregator:
       
       # Send all other logs to Elasticsearch
       <match fluent.**>
-        @type elasticsearch
+        @type forward
         host elasticsearch-master-0.elasticsearch-master-hl.efk.svc.cluster.local
         port 9200
       </match>
