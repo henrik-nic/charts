@@ -184,7 +184,7 @@ forwarder:
     fluentd.conf: |
       # Ignore fluentd own events
       <match fluent.**>
-        @type *
+        @type null
         format json
       </match>
 
@@ -790,7 +790,10 @@ aggregator:
       # Ignore fluentd own events
       <match fluent.**>
         @type forward
-        format json
+        <server>
+          host "fluentd-0.fluentd-headless.efk.svc.cluster.local:24224"
+          port 24224
+        </server>
       </match>
 
       @include fluentd-inputs.conf
