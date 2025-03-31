@@ -2013,7 +2013,7 @@ ingest:
     enabled: false
     ## @param ingest.service.type Elasticsearch ingest-only service type
     ##
-    type: ClusterIP
+    type: NodePort
     ## @param ingest.service.ports.restAPI Elasticsearch service REST API port
     ## @param ingest.service.ports.transport Elasticsearch service transport port
     ##
@@ -2032,7 +2032,7 @@ ingest:
     ## e.g.:
     ## clusterIP: None
     ##
-    clusterIP: ""
+    NodePort: ""
     ## @param ingest.service.loadBalancerIP Elasticsearch ingest-only service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
