@@ -219,7 +219,9 @@ forwarder:
       
       <filter kubernetes.**>
         @type grep
-        regexp1 message ^(ERROR|WARN)
+        <regexp>
+          message ^(ERROR|WARN)
+        </regexp>
       </filter>
 
       <filter kubernetes.**>
