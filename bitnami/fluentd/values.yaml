@@ -842,21 +842,10 @@ aggregator:
         @type stdout
       </match>
 
-      <match kubernets.**>
-        @type elasticsearch
-        host elasticsearch.efk
-        port 9200
-        logstash_format true
-        logstash_prefix kubernetes-logs
-        flush_interval 5s
-        index_name fluentd-{tag}-logs
-      </match>
-
       # Send the logs to the standard output
       <match **>
         @type stdout
       </match>
-
   ## @param aggregator.port Port the Aggregator container will listen for logs. Leave it blank to ignore.
   ## You can specify other ports in the aggregator.containerPorts parameter
   ##
