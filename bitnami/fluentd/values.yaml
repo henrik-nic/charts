@@ -834,10 +834,15 @@ aggregator:
 
       
     fluentd-output.conf: |
-      <match fluentd.healthcheck>
-        @type stdout
+      <match kubernetes.**>
+        @type elasticsearch
+        host elasticsearch.efk
+        port 9200
+        logstash_format true
+        logstash_prefix kubernetes-logs
+        flush_interval 5s
+        index_name fluentd-${tag}-logs
       </match>
-   
       
       <match **>
         @type stdout
