@@ -815,12 +815,7 @@ aggregator:
       <match fluentd.healthcheck>
         @type stdout
       </match>
-      
-      <filter **>
-        @type json
-        key_name message
-      </filter>
-      
+            
       <match kubernetes.**>
         @type elasticsearch
         host elasticsearch.efk
