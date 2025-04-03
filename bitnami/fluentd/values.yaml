@@ -198,6 +198,12 @@ forwarder:
         @type http
         port 9880
       </source>
+
+      <format>
+        @type stdout
+        output_type json
+      </format>
+      
       # Get the logs from the containers running in the node
       <source>
         @type tail
@@ -815,12 +821,7 @@ aggregator:
       <match fluentd.healthcheck>
         @type stdout
       </match>
-            
-      <match kubernetes.**>
-        @type elasticsearch
-        host elasticsearch.efk
-        port 9200
-      </match>      
+   
       
       <match **>
         @type stdout
