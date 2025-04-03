@@ -263,9 +263,25 @@ forwarder:
       </match>
       {{- else }}
       # Send the logs to the standard output
+       <match **>
+        @type stdout
+      </match>
+
+      <match kubernetes.**>
+        @type elasticsearch
+        host elasticsearch.efk
+        port 9200
+        logstash_format true
+        logstash_prefix kubernetes-logs
+        flush_interval 5s
+        index_name fluentd-${tag}-logs
+      </match>
+      
       <match **>
         @type stdout
       </match>
+
+      
       {{- end }}
 
   ## @param forwarder.extraArgs Extra arguments for the Fluentd command line
