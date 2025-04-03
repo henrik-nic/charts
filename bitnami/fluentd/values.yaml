@@ -809,16 +809,28 @@ aggregator:
         bind 0.0.0.0
         port 9880
       </source>
+
+      
     fluentd-output.conf: |
-      # Throw the healthcheck to the standard output
       <match fluentd.healthcheck>
         @type stdout
       </match>
-
-      # Send the logs to the standard output
+      
+      <filter **>
+        @type json
+        key_name message
+      </filter>
+      
+      <match kubernetes.**>
+        @type elasticsearch
+        host elasticsearch.efk
+        port 9200
+      </match>      
+      
       <match **>
         @type stdout
       </match>
+      
   ## @param aggregator.port Port the Aggregator container will listen for logs. Leave it blank to ignore.
   ## You can specify other ports in the aggregator.containerPorts parameter
   ##
