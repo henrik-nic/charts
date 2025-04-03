@@ -792,17 +792,8 @@ aggregator:
       <source>
         @type forward
         bind 0.0.0.0
-        port {{ .Values.aggregator.port }}
-        {{- if .Values.tls.enabled }}
-        <transport tls>
-          ca_path /opt/bitnami/fluentd/certs/in_forward/ca.crt
-          cert_path /opt/bitnami/fluentd/certs/in_forward/tls.crt
-          private_key_path /opt/bitnami/fluentd/certs/in_forward/tls.key
-          client_cert_auth true
-        </transport>
-        {{- end }}
-      </source>
-      {{- end }}
+        port 24224
+      </source>     
 
       # HTTP input for the liveness and readiness probes
       <source>
@@ -810,17 +801,35 @@ aggregator:
         bind 0.0.0.0
         port 9880
       </source>
-    fluentd-output.conf: |
-      # Throw the healthcheck to the standard output
-      <match fluentd.healthcheck>
-        @type stdout
-      </match>
 
-      # Send the logs to the standard output
-      <match **>
-        @type stdout
-      </match>
-    metrics.conf: |
+      
+    fluentd-output.conf: |
+    fluentd-inputs.conf: |
+    # Input to receive logs from Fluentd forwarders or containers
+    <source>
+      @type forward
+      bind 0.0.0.0
+      port 24224
+    </source>
+   fluentd-output.conf: |
+    # Output configuration to send logs to Elasticsearch (or stdout)
+    <match kubernetes.**>
+      @type elasticsearch
+      host elasticsearch.efk
+      port 9200
+      logstash_format true
+      logstash_prefix kubernetes-logs
+      flush_interval 5s
+      index_name fluentd-${tag}-logs
+    </match>
+    # Send healthcheck logs to stdout
+    <match fluentd.healthcheck>
+      @type stdout
+    </match>
+    # Send all other logs to stdout (debugging)
+    <match **>
+      @type stdout
+    </match>
   
   ## @param aggregator.port Port the Aggregator container will listen for logs. Leave it blank to ignore.
   ## You can specify other ports in the aggregator.containerPorts parameter
