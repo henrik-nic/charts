@@ -261,34 +261,7 @@ forwarder:
         @type stdout
       </match>
       {{- end }}
-    metrics.conf: |
-      # Prometheus Exporter Plugin
-      # input plugin that exports metrics
-      <source>
-        @type prometheus
-        port {{ .Values.metrics.service.port }}
-      </source>
-      # input plugin that collects metrics from MonitorAgent
-      <source>
-        @type prometheus_monitor
-        <labels>
-          host ${hostname}
-        </labels>
-      </source>
-      # input plugin that collects metrics for output plugin
-      <source>
-        @type prometheus_output_monitor
-        <labels>
-          host ${hostname}
-        </labels>
-      </source>
-      # input plugin that collects metrics for in_tail plugin
-      <source>
-        @type prometheus_tail_monitor
-        <labels>
-          host ${hostname}
-        </labels>
-      </source>
+
   ## @param forwarder.extraArgs Extra arguments for the Fluentd command line
   ## ref: https://docs.fluentd.org/deployment/command-line-option
   ##
