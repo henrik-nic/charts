@@ -184,7 +184,7 @@ forwarder:
     fluentd.conf: |
       # Ignore fluentd own events
       <match fluent.**>
-        @type null
+        @type tial
       </match>
 
       @include fluentd-inputs.conf
@@ -195,14 +195,41 @@ forwarder:
     fluentd-inputs.conf: |
       # HTTP input for the liveness and readiness probes
       <source>
-        @type http
-        port 9880
+        @type tail
+        path /opt/apps/logs/app_service.log
+        pos_file /opt/apps/logs/app_service.pos
+        tag fluentd
+        format json
+        read_from_head true
       </source>
 
-      <format>
+      <filter applog>
+        @type record_transformer
+        remove_keys demo_field2
+        <record>
+          log_message ${record["test-fluentd"]}
+        </record>
+      </filter>
+
+
+      <match applog>
+        @type elasticsearch
+        host localhost
+        port 9200
+        logstash_format true
+        
+        <buffer>
+          @type file
+          path /var/log/fluentd-buffer
+          flush_interval 5s
+          chunk_limit_size 256MB
+        </buffer>
+      </match>
+      
+      <match fluentd>
         @type stdout
-        output_type json
-      </format>
+        @id output_stdout
+      </match>
       
       # Get the logs from the containers running in the node
       <source>
