@@ -846,6 +846,16 @@ aggregator:
       <match **>
         @type stdout
       </match>
+
+      <match kubernetes.**>
+        @type elasticsearch
+        host elasticsearch.efk
+        port 9200
+        logstash_format true
+        logstash_prefix kubernetes-logs
+        flush_interval 5s
+        index_name fluentd-${tag}-logs
+      </match>
     metrics.conf: |
       # Prometheus Exporter Plugin
       # input plugin that exports metrics
