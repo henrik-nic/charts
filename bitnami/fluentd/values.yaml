@@ -198,12 +198,12 @@ forwarder:
         @type tail
         path /opt/apps/logs/app_service.log
         pos_file /opt/apps/logs/app_service.pos
-        tag fluentd
+        tag kubernetes
         format json
         read_from_head true
       </source>
 
-      <filter fluentd>
+      <filter kubernetes>
         @type record_transformer
         remove_keys demo_field2
         <record>
@@ -212,7 +212,7 @@ forwarder:
       </filter>
 
 
-      <match fluentd>
+      <match kubernetes>
         @type elasticsearch
         host localhost
         port 9200
@@ -226,7 +226,7 @@ forwarder:
         </buffer>
       </match>
       
-      <match fluentd>
+      <match kubernetes>
         @type stdout
         @id output_stdout
       </match>
