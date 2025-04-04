@@ -850,7 +850,7 @@ aggregator:
       <match kubernetes.**>
         @type elasticsearch
         host elasticsearch.efk
-        port 9200
+        port 30092
         logstash_format true
         logstash_prefix kubernetes-logs
         flush_interval 5s
