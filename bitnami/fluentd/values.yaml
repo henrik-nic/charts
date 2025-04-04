@@ -195,42 +195,9 @@ forwarder:
     fluentd-inputs.conf: |
       # HTTP input for the liveness and readiness probes
       <source>
-        @type tail
-        path /opt/apps/logs/app_service.log
-        pos_file /opt/apps/logs/app_service.pos
-        tag kubernetes
-        format json
-        read_from_head true
+        @type http
+        port 9880
       </source>
-
-      <filter kubernetes>
-        @type record_transformer
-        remove_keys demo_field2
-        <record>
-          log_message ${record["test-fluentd"]}
-        </record>
-      </filter>
-
-
-      <match kubernetes>
-        @type elasticsearch
-        host localhost
-        port 9200
-        logstash_format true
-        
-        <buffer>
-          @type file
-          path /var/log/fluentd-buffer
-          flush_interval 5s
-          chunk_limit_size 256MB
-        </buffer>
-      </match>
-      
-      <match kubernetes>
-        @type stdout
-        @id output_stdout
-      </match>
-      
       # Get the logs from the containers running in the node
       <source>
         @type tail
@@ -290,27 +257,38 @@ forwarder:
       </match>
       {{- else }}
       # Send the logs to the standard output
-       <match **>
-        @type stdout
-      </match>
-
-      <match kubernetes.**>
-        @type elasticsearch
-        host elasticsearch.efk
-        port 9200
-        logstash_format true
-        logstash_prefix kubernetes-logs
-        flush_interval 5s
-        index_name fluentd-${tag}-logs
-      </match>
-      
       <match **>
         @type stdout
       </match>
-
-      
       {{- end }}
-
+    metrics.conf: |
+      # Prometheus Exporter Plugin
+      # input plugin that exports metrics
+      <source>
+        @type prometheus
+        port {{ .Values.metrics.service.port }}
+      </source>
+      # input plugin that collects metrics from MonitorAgent
+      <source>
+        @type prometheus_monitor
+        <labels>
+          host ${hostname}
+        </labels>
+      </source>
+      # input plugin that collects metrics for output plugin
+      <source>
+        @type prometheus_output_monitor
+        <labels>
+          host ${hostname}
+        </labels>
+      </source>
+      # input plugin that collects metrics for in_tail plugin
+      <source>
+        @type prometheus_tail_monitor
+        <labels>
+          host ${hostname}
+        </labels>
+      </source>
   ## @param forwarder.extraArgs Extra arguments for the Fluentd command line
   ## ref: https://docs.fluentd.org/deployment/command-line-option
   ##
@@ -858,22 +836,39 @@ aggregator:
         bind 0.0.0.0
         port 9880
       </source>
-
-      
     fluentd-output.conf: |
-      <match kubernetes.**>
-        @type elasticsearch
-        host elasticsearch.efk
-        port 9200
-        logstash_format true
-        logstash_prefix kubernetes-logs
-        index_name fluentd-${tag}-logs
+      # Throw the healthcheck to the standard output
+      <match fluentd.healthcheck>
+        @type stdout
       </match>
-      
+
+      # Send the logs to the standard output
       <match **>
         @type stdout
       </match>
-      
+    metrics.conf: |
+      # Prometheus Exporter Plugin
+      # input plugin that exports metrics
+      <source>
+        @type prometheus
+        port {{ .Values.metrics.service.port }}
+      </source>
+
+      # input plugin that collects metrics from MonitorAgent
+      <source>
+        @type prometheus_monitor
+        <labels>
+          host ${hostname}
+        </labels>
+      </source>
+
+      # input plugin that collects metrics for output plugin
+      <source>
+        @type prometheus_output_monitor
+        <labels>
+          host ${hostname}
+        </labels>
+      </source>
   ## @param aggregator.port Port the Aggregator container will listen for logs. Leave it blank to ignore.
   ## You can specify other ports in the aggregator.containerPorts parameter
   ##
