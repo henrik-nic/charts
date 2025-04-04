@@ -203,7 +203,7 @@ forwarder:
         read_from_head true
       </source>
 
-      <filter applog>
+      <filter fluentd>
         @type record_transformer
         remove_keys demo_field2
         <record>
@@ -212,7 +212,7 @@ forwarder:
       </filter>
 
 
-      <match applog>
+      <match fluentd>
         @type elasticsearch
         host localhost
         port 9200
