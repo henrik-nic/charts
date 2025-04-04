@@ -184,7 +184,7 @@ forwarder:
     fluentd.conf: |
       # Ignore fluentd own events
       <match fluent.**>
-        @type tial
+        @type tail
       </match>
 
       @include fluentd-inputs.conf
