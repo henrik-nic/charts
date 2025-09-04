@@ -262,7 +262,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass: ""
+  storageClass: microk8s-hostpath
   ## @param persistence.existingClaim Provide an existing `PersistentVolumeClaim`
   ##
   existingClaim: ""
@@ -370,7 +370,7 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePorts:
-    http: ""
+    http: 30561
   ## @param service.clusterIP %%MAIN_CONTAINER_NAME%% service Cluster IP
   ## e.g.:
   ## clusterIP: None
