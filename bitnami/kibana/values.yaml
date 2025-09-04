@@ -265,7 +265,7 @@ persistence:
   storageClass: ""
   ## @param persistence.existingClaim Provide an existing `PersistentVolumeClaim`
   ##
-  existingClaim: ""
+  existingClaim: kibana
   ## @param persistence.accessModes Persistent Volume access modes
   ##
   accessModes:
